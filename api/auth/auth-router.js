@@ -26,6 +26,7 @@ router.post("/login", async (req, res) => {
     const user = await users.findBy({ username }).first();
 
     if (user && bycrypt.compareSync(password, user.password)) {
+        req.session.user = user;
       res.status(200).json({
         message: `Welcome ${user.username}`,
       });
@@ -39,6 +40,24 @@ router.post("/login", async (req, res) => {
     res.status(500).json({
       message: "error logging in",
     });
+  }
+});
+
+
+router.delete('/logout', (req, res) => {
+  if (req.session) {
+      // check out the documentation for this method at
+      // https://www.npmjs.com/package/express-session, under
+      // Session.destroy().
+      req.session.destroy((err) => {
+          if (err) {
+              res.status(400).json({ message: 'error logging out:', error: err });
+          } else {
+              res.json({ message: 'logged out' });
+          }
+      });
+  } else {
+      res.end();
   }
 });
 

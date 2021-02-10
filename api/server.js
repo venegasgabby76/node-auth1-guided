@@ -18,7 +18,7 @@ const sessionConfig = {
     httpOnly: true,
   }, 
   resave: false,
-  saveUninitalized: false,
+  saveUninitialized: false,
   store: new KnexSessionStor({
     knex: require("../database/connection"),
     tablename: "sessions",
